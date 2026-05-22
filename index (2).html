@@ -1,0 +1,1442 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+  <title>Espelho de Fé — Sessões de Oração</title>
+  <meta name="theme-color" content="#150d2d" />
+  <style>
+    :root{
+      --bg:#0d071b;
+      --text:#fffaf0;
+      --muted:rgba(255,250,240,.70);
+      --soft:rgba(255,250,240,.52);
+      --gold:#f6d365;
+      --gold2:#fda085;
+      --green:#70f2a4;
+      --green2:#16a765;
+      --danger:#ff6b6b;
+      --line:rgba(255,255,255,.14);
+      --lineGold:rgba(246,211,101,.38);
+      --shadow:0 18px 60px rgba(0,0,0,.42);
+      --radius:24px;
+      --field:rgba(0,0,0,.25);
+    }
+
+    *{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+    html,body{
+      margin:0;
+      min-height:100%;
+      font-family:Inter,system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;
+      color:var(--text);
+      background:var(--bg);
+    }
+    body{
+      background:
+        radial-gradient(circle at 16% 4%, rgba(246,211,101,.25), transparent 28%),
+        radial-gradient(circle at 88% 8%, rgba(253,160,133,.18), transparent 28%),
+        radial-gradient(circle at 45% 105%, rgba(112,242,164,.12), transparent 36%),
+        linear-gradient(160deg, #090512 0%, #150d2d 48%, #241342 100%);
+      padding:18px;
+      padding-bottom:38px;
+    }
+
+    .app{max-width:820px;margin:0 auto}
+    .glass{
+      border:1px solid var(--line);
+      background:linear-gradient(135deg, rgba(255,255,255,.12), rgba(255,255,255,.045));
+      box-shadow:var(--shadow);
+      backdrop-filter:blur(18px);
+    }
+
+    header{
+      position:relative;
+      overflow:hidden;
+      border-radius:32px;
+      padding:27px 22px;
+    }
+    header::before{
+      content:"";
+      position:absolute;
+      inset:-85px -65px auto auto;
+      width:205px;height:205px;
+      border-radius:50%;
+      background:radial-gradient(circle, rgba(246,211,101,.50), transparent 68%);
+      filter:blur(2px);
+    }
+    .badge{
+      display:inline-flex;
+      gap:8px;
+      align-items:center;
+      padding:8px 12px;
+      border:1px solid var(--lineGold);
+      border-radius:999px;
+      color:var(--gold);
+      background:rgba(246,211,101,.08);
+      font-size:13px;
+      font-weight:900;
+    }
+    h1{
+      margin:16px 0 8px;
+      font-size:clamp(31px,8vw,56px);
+      line-height:.96;
+      letter-spacing:-1.5px;
+    }
+    .subtitle{
+      margin:0;
+      color:var(--muted);
+      font-size:15.5px;
+      line-height:1.55;
+      max-width:60ch;
+    }
+    .verse{
+      margin-top:18px;
+      padding:14px 15px;
+      border-left:3px solid var(--gold);
+      color:rgba(255,250,240,.86);
+      background:rgba(0,0,0,.18);
+      border-radius:16px;
+      font-size:14px;
+      line-height:1.5;
+    }
+
+    .panel{
+      margin-top:16px;
+      border-radius:var(--radius);
+      overflow:hidden;
+    }
+    .panel-inner{padding:18px}
+    label,.section-title{
+      display:flex;
+      justify-content:space-between;
+      gap:10px;
+      align-items:center;
+      margin-bottom:10px;
+      color:var(--gold);
+      font-weight:950;
+      font-size:14px;
+      letter-spacing:.3px;
+      text-transform:uppercase;
+    }
+    .count{
+      color:var(--muted);
+      font-size:12px;
+      font-weight:850;
+      text-transform:none;
+      letter-spacing:0;
+    }
+
+    textarea,input,select{
+      width:100%;
+      border:1px solid rgba(255,255,255,.16);
+      border-radius:20px;
+      outline:none;
+      color:var(--text);
+      background:var(--field);
+      box-shadow:inset 0 1px 0 rgba(255,255,255,.06);
+      font:inherit;
+    }
+    textarea{
+      min-height:188px;
+      resize:vertical;
+      padding:16px;
+      line-height:1.65;
+      font-size:16px;
+    }
+    input,select{padding:14px 15px;font-size:15px}
+    textarea::placeholder,input::placeholder{color:rgba(255,250,240,.42)}
+    textarea:focus,input:focus,select:focus{
+      border-color:rgba(246,211,101,.70);
+      box-shadow:0 0 0 4px rgba(246,211,101,.10), inset 0 1px 0 rgba(255,255,255,.08);
+    }
+
+    .grid2{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+    .actions{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:12px}
+    button{
+      border:0;
+      border-radius:18px;
+      padding:14px 12px;
+      color:#1c1231;
+      font-weight:950;
+      font-size:14px;
+      cursor:pointer;
+      background:linear-gradient(135deg,var(--gold),var(--gold2));
+      box-shadow:0 10px 30px rgba(246,211,101,.22);
+      transition:.16s transform,.16s opacity,.16s filter;
+    }
+    button:hover{filter:brightness(1.04)}
+    button:active{transform:scale(.98)}
+    button:disabled{opacity:.45;cursor:not-allowed;filter:grayscale(.5)}
+    .secondary{
+      color:var(--text);
+      background:rgba(255,255,255,.10);
+      box-shadow:none;
+      border:1px solid rgba(255,255,255,.15);
+    }
+    .success{
+      color:#052513;
+      background:linear-gradient(135deg,var(--green),#b6ffd1);
+      box-shadow:0 10px 30px rgba(112,242,164,.16);
+    }
+    .danger{
+      color:white;
+      background:rgba(255,107,107,.20);
+      border:1px solid rgba(255,107,107,.36);
+      box-shadow:none;
+    }
+    .mini{
+      padding:9px 10px;
+      border-radius:13px;
+      font-size:12px;
+      box-shadow:none;
+    }
+
+    .stats{
+      display:grid;
+      grid-template-columns:repeat(4,1fr);
+      gap:10px;
+      margin-top:16px;
+    }
+    .stat{
+      padding:13px 8px;
+      text-align:center;
+      border-radius:20px;
+      background:rgba(255,255,255,.08);
+      border:1px solid var(--line);
+    }
+    .stat strong{display:block;color:var(--gold);font-size:20px}
+    .stat span{display:block;color:var(--muted);font-size:12px;margin-top:3px}
+
+    .session-card{
+      border:1px solid var(--line);
+      border-radius:22px;
+      padding:15px;
+      background:linear-gradient(135deg,rgba(255,255,255,.115),rgba(255,255,255,.045));
+      margin-top:12px;
+    }
+    .session-card.done{
+      border-color:rgba(112,242,164,.45);
+      background:
+        linear-gradient(135deg,rgba(112,242,164,.16),rgba(255,255,255,.045));
+    }
+    .session-top{display:flex;justify-content:space-between;gap:10px;align-items:flex-start}
+    .session-title{margin:0;font-size:20px;letter-spacing:-.35px}
+    .session-purpose{margin:8px 0 0;color:var(--muted);line-height:1.5;font-size:14px;white-space:pre-wrap}
+    .pill{
+      display:inline-flex;
+      align-items:center;
+      gap:6px;
+      border-radius:999px;
+      padding:7px 10px;
+      font-size:12px;
+      font-weight:950;
+      white-space:nowrap;
+      color:var(--gold);
+      background:rgba(246,211,101,.09);
+      border:1px solid rgba(246,211,101,.30);
+    }
+    .pill.done{
+      color:var(--green);
+      background:rgba(112,242,164,.10);
+      border-color:rgba(112,242,164,.34);
+    }
+    .session-meta{
+      display:flex;
+      gap:8px;
+      flex-wrap:wrap;
+      margin-top:12px;
+      color:var(--soft);
+      font-size:12px;
+      font-weight:800;
+    }
+    .session-actions{display:flex;gap:8px;flex-wrap:wrap;justify-content:flex-end;margin-top:12px}
+
+
+    .session-picker-btn{
+      width:100%;
+      display:flex;
+      justify-content:space-between;
+      align-items:center;
+      gap:14px;
+      text-align:left;
+      color:var(--text);
+      background:rgba(0,0,0,.25);
+      border:1px solid rgba(255,255,255,.16);
+      box-shadow:inset 0 1px 0 rgba(255,255,255,.06);
+      padding:15px;
+      border-radius:20px;
+    }
+    .session-picker-btn span{display:flex;flex-direction:column;gap:4px;min-width:0}
+    .session-picker-btn small{
+      color:var(--gold);
+      text-transform:uppercase;
+      font-size:11px;
+      font-weight:950;
+      letter-spacing:.3px;
+    }
+    .session-picker-btn strong{
+      color:var(--text);
+      font-size:16px;
+      white-space:nowrap;
+      overflow:hidden;
+      text-overflow:ellipsis;
+    }
+    .session-picker-btn b{
+      flex:0 0 auto;
+      color:#1c1231;
+      background:linear-gradient(135deg,var(--gold),var(--gold2));
+      padding:9px 11px;
+      border-radius:999px;
+      font-size:12px;
+    }
+    .session-search-row{
+      display:grid;
+      grid-template-columns:1fr;
+      gap:10px;
+      margin-bottom:12px;
+    }
+    .session-picker-list{
+      display:flex;
+      flex-direction:column;
+      gap:10px;
+      max-height:58vh;
+      overflow:auto;
+      padding-right:2px;
+    }
+    .picker-card{
+      width:100%;
+      color:var(--text);
+      text-align:left;
+      border-radius:20px;
+      padding:14px;
+      background:rgba(255,255,255,.075);
+      border:1px solid rgba(255,255,255,.13);
+      box-shadow:none;
+    }
+    .picker-card.selected{
+      border-color:rgba(246,211,101,.62);
+      background:rgba(246,211,101,.10);
+    }
+    .picker-card.done{
+      border-color:rgba(112,242,164,.36);
+      background:rgba(112,242,164,.08);
+    }
+    .picker-title-line{
+      display:flex;
+      justify-content:space-between;
+      gap:10px;
+      align-items:flex-start;
+      margin-bottom:7px;
+    }
+    .picker-title-line strong{
+      font-size:16px;
+      line-height:1.25;
+      letter-spacing:-.2px;
+    }
+    .picker-purpose{
+      margin:0;
+      color:var(--muted);
+      font-size:13px;
+      line-height:1.45;
+      display:-webkit-box;
+      -webkit-line-clamp:2;
+      -webkit-box-orient:vertical;
+      overflow:hidden;
+    }
+    .picker-meta{
+      display:flex;
+      flex-wrap:wrap;
+      gap:7px;
+      margin-top:10px;
+      color:var(--soft);
+      font-size:12px;
+      font-weight:850;
+    }
+
+    .toolbar{display:grid;grid-template-columns:1fr auto;gap:10px;align-items:center}
+    .list{display:flex;flex-direction:column;gap:12px;margin-top:14px}
+    .empty{
+      padding:22px;
+      text-align:center;
+      color:var(--muted);
+      border:1px dashed rgba(255,255,255,.20);
+      border-radius:22px;
+      line-height:1.5;
+    }
+
+    .prayer{
+      border:1px solid var(--line);
+      border-radius:22px;
+      padding:15px;
+      background:linear-gradient(135deg,rgba(255,255,255,.105),rgba(255,255,255,.04));
+      box-shadow:0 10px 28px rgba(0,0,0,.18);
+    }
+    .prayer.done{
+      border-color:rgba(112,242,164,.45);
+      background:
+        linear-gradient(135deg,rgba(112,242,164,.14),rgba(255,255,255,.04));
+    }
+    .date{font-size:12px;color:var(--gold);font-weight:950;line-height:1.45;margin-bottom:10px}
+    .done .date{color:var(--green)}
+    .edited{color:var(--soft);font-weight:800}
+    .prayer-text{
+      margin:0;
+      white-space:pre-wrap;
+      word-wrap:break-word;
+      color:rgba(255,250,240,.92);
+      line-height:1.65;
+      font-size:15.5px;
+    }
+
+    .prayer-text{
+      position:relative;
+      overflow:hidden;
+      max-height:122px;
+      mask-image:linear-gradient(to bottom, black 72%, transparent 100%);
+      -webkit-mask-image:linear-gradient(to bottom, black 72%, transparent 100%);
+    }
+
+    .focus-reader-backdrop{
+      position:fixed;
+      inset:0;
+      z-index:170;
+      display:none;
+      align-items:center;
+      justify-content:center;
+      background:rgba(0,0,0,.82);
+      padding:14px;
+      backdrop-filter:blur(8px);
+    }
+    .focus-reader-backdrop.open{display:flex}
+
+    .focus-reader{
+      width:100%;
+      max-width:780px;
+      max-height:92vh;
+      overflow:auto;
+      border-radius:30px;
+      border:1px solid rgba(246,211,101,.26);
+      background:
+        radial-gradient(circle at 10% 0%, rgba(246,211,101,.12), transparent 32%),
+        linear-gradient(160deg, rgba(30,18,59,.98), rgba(14,8,30,.98));
+      box-shadow:0 24px 90px rgba(0,0,0,.75);
+      padding:22px;
+      animation:readerRise .18s ease-out;
+    }
+
+    @keyframes readerRise{
+      from{transform:translateY(24px) scale(.985);opacity:.3}
+      to{transform:translateY(0) scale(1);opacity:1}
+    }
+
+    .focus-top{
+      display:flex;
+      justify-content:space-between;
+      align-items:flex-start;
+      gap:12px;
+      margin-bottom:16px;
+      padding-bottom:14px;
+      border-bottom:1px solid rgba(255,255,255,.10);
+    }
+
+    .focus-title{
+      margin:0;
+      color:var(--gold);
+      font-size:14px;
+      text-transform:uppercase;
+      letter-spacing:.4px;
+      font-weight:950;
+    }
+
+    .focus-meta{
+      margin:7px 0 0;
+      color:var(--muted);
+      font-size:13px;
+      line-height:1.45;
+    }
+
+    .focus-content{
+      white-space:pre-wrap;
+      line-height:1.9;
+      font-size:18px;
+      color:rgba(255,250,240,.95);
+      letter-spacing:.1px;
+    }
+
+    .focus-close{
+      width:44px;
+      height:44px;
+      padding:0;
+      border-radius:50%;
+      color:var(--text);
+      background:rgba(255,255,255,.10);
+      border:1px solid rgba(255,255,255,.15);
+      box-shadow:none;
+      flex:0 0 auto;
+      font-size:22px;
+    }
+    .read-more-btn{
+      margin-top:10px;
+      padding:0;
+      background:none;
+      border:none;
+      box-shadow:none;
+      color:var(--gold);
+      font-size:13px;
+      font-weight:950;
+      letter-spacing:.2px;
+    }
+    .read-more-btn:hover{
+      filter:none;
+      opacity:.88;
+    }
+
+    .prayer-actions{display:flex;gap:8px;justify-content:flex-end;margin-top:12px;flex-wrap:wrap}
+
+    .modal-backdrop{
+      position:fixed;
+      inset:0;
+      z-index:100;
+      display:none;
+      align-items:flex-end;
+      justify-content:center;
+      background:rgba(0,0,0,.64);
+      padding:14px;
+    }
+    .modal-backdrop.open{display:flex}
+    .modal{
+      width:100%;
+      max-width:760px;
+      max-height:92vh;
+      overflow:auto;
+      border-radius:28px;
+      border:1px solid rgba(246,211,101,.26);
+      background:
+        radial-gradient(circle at 10% 0%, rgba(246,211,101,.16), transparent 32%),
+        linear-gradient(160deg, rgba(30,18,59,.98), rgba(14,8,30,.98));
+      box-shadow:0 24px 90px rgba(0,0,0,.68);
+      padding:16px;
+      animation:rise .18s ease-out;
+    }
+    @keyframes rise{from{transform:translateY(22px);opacity:.3}to{transform:translateY(0);opacity:1}}
+    .modal-top{
+      display:flex;
+      justify-content:space-between;
+      align-items:flex-start;
+      gap:12px;
+      padding:4px 2px 14px;
+      border-bottom:1px solid rgba(255,255,255,.10);
+      margin-bottom:14px;
+    }
+    .modal-title{margin:0;color:var(--text);font-size:22px;letter-spacing:-.5px}
+    .modal-sub{margin:6px 0 0;color:var(--muted);font-size:13px;line-height:1.45}
+    .close-btn{
+      width:42px;height:42px;padding:0;border-radius:50%;
+      color:var(--text);background:rgba(255,255,255,.10);
+      border:1px solid rgba(255,255,255,.15);box-shadow:none;
+      flex:0 0 auto;font-size:22px;
+    }
+    .modal-actions{
+      position:sticky;
+      bottom:-16px;
+      display:grid;
+      grid-template-columns:1fr 1fr;
+      gap:10px;
+      margin:14px -16px -16px;
+      padding:14px 16px 16px;
+      background:linear-gradient(180deg, transparent, rgba(14,8,30,.96) 24%);
+    }
+    #editText{min-height:300px}
+
+    .print-area{display:none}
+
+    .toast{
+      position:fixed;
+      left:18px;right:18px;bottom:18px;
+      max-width:720px;margin:auto;
+      padding:14px 16px;
+      border-radius:18px;
+      background:rgba(15,10,32,.94);
+      border:1px solid rgba(246,211,101,.30);
+      color:var(--text);
+      box-shadow:var(--shadow);
+      opacity:0;
+      transform:translateY(18px);
+      pointer-events:none;
+      transition:.22s ease;
+      text-align:center;
+      font-weight:950;
+      z-index:130;
+    }
+    .toast.show{opacity:1;transform:translateY(0)}
+    footer{padding:22px 4px 0;color:rgba(255,250,240,.55);text-align:center;font-size:12px;line-height:1.5}
+
+    @media (min-width:680px){.modal-backdrop{align-items:center}}
+    @media (max-width:520px){
+      body{padding:12px}
+      header{padding:23px 18px;border-radius:28px}
+      .panel-inner{padding:14px}
+      .actions,.toolbar,.modal-actions,.grid2{grid-template-columns:1fr}
+      .stats{grid-template-columns:repeat(2,1fr);gap:8px}
+      .stat{padding:11px 6px}
+      .toolbar button{width:100%}
+      .session-top{flex-direction:column}
+      .pill{align-self:flex-start}
+      .modal{border-radius:25px}
+    }
+
+    @media print{
+      body{background:white;color:#20152f;padding:0}
+      body *{visibility:hidden}
+      .print-area,.print-area *{visibility:visible}
+      .print-area{
+        display:block;
+        position:absolute;
+        inset:0;
+        padding:28px;
+        color:#20152f;
+        font-family:Georgia,serif;
+      }
+      .print-cover{
+        min-height:92vh;
+        border:2px solid #d8b24e;
+        border-radius:20px;
+        padding:42px 32px;
+        display:flex;
+        flex-direction:column;
+        justify-content:center;
+        text-align:center;
+      }
+      .print-cover h1{font-size:46px;margin:0 0 10px;color:#20152f}
+      .print-cover p{font-size:18px;line-height:1.55;color:#5d5269}
+      .print-session{
+        break-before:page;
+        margin-bottom:22px;
+        border-bottom:2px solid #d8b24e;
+        padding-bottom:12px;
+      }
+      .print-session h2{font-size:28px;margin:0 0 8px}
+      .print-prayer{
+        break-inside:avoid;
+        border:1px solid #e0d5bd;
+        border-radius:16px;
+        padding:16px;
+        margin:14px 0;
+      }
+      .print-prayer.done{border-color:#54ad76;background:#eefbf3}
+      .print-date{font-size:12px;color:#8a6a13;font-weight:bold;margin-bottom:8px}
+      .print-text{white-space:pre-wrap;line-height:1.65;font-size:15px}
+    }
+  </style>
+</head>
+<body>
+  <main class="app">
+    <header class="glass">
+      <div class="badge">✦ Espelho de Fé</div>
+      <h1>Sessões<br>de Oração</h1>
+      <p class="subtitle">
+        Crie um propósito, escreva todos os dias como se a bênção já tivesse acontecido e, quando se cumprir no mundo físico, marque como conferido.
+      </p>
+      <div class="verse">“Tudo o que pedirdes em oração, crendo, recebereis.” — Mateus 21:22</div>
+    </header>
+
+    <section class="panel glass">
+      <div class="panel-inner">
+        <div class="section-title">Nova sessão de propósito <span class="count">inicie uma jornada</span></div>
+        <div class="grid2">
+          <div>
+            <label for="sessionTitle">Título</label>
+            <input id="sessionTitle" placeholder="Ex.: Minha casa" />
+          </div>
+          <div>
+            <label for="sessionGoal">Declaração</label>
+            <input id="sessionGoal" placeholder="Ex.: Agradeço porque minha casa já chegou." />
+          </div>
+        </div>
+        <div class="actions">
+          <button id="createSessionBtn">Criar sessão</button>
+          <button class="secondary" id="exportPdfBtn">Exportar PDF da sessão</button>
+        </div>
+        <div class="actions">
+          <button class="secondary" id="exportBackupBtn">Backup leve JSON</button>
+          <button class="secondary" id="exportTxtBtn">Backup leve TXT</button>
+        </div>
+
+        <div class="stats">
+          <div class="stat"><strong id="sessionTotal">0</strong><span>sessões</span></div>
+          <div class="stat"><strong id="activeTotal">0</strong><span>em fé</span></div>
+          <div class="stat"><strong id="doneTotal">0</strong><span>conferidas</span></div>
+          <div class="stat"><strong id="prayerTotal">0</strong><span>orações</span></div>
+        </div>
+      </div>
+    </section>
+
+    <section class="panel glass">
+      <div class="panel-inner">
+        <div class="section-title">Sessão atual <span class="count" id="activeSessionLabel">nenhuma selecionada</span></div>
+        <button class="session-picker-btn" id="openSessionPickerBtn" type="button">
+          <span>
+            <small>Sessão selecionada</small>
+            <strong id="sessionPickerTitle">Nenhuma sessão criada</strong>
+          </span>
+          <b>Escolher</b>
+        </button>
+        <select id="sessionSelect" style="display:none;"></select>
+
+        <div id="currentSessionBox"></div>
+
+        <label for="prayerText" style="margin-top:16px;">
+          Nova oração para esta sessão
+          <span class="count" id="charCount">0 caracteres</span>
+        </label>
+        <textarea id="prayerText" placeholder="Escreva no tempo da fé: Senhor, eu agradeço porque essa bênção já se cumpriu..."></textarea>
+
+        <div class="actions">
+          <button id="savePrayerBtn">Registrar oração</button>
+          <button class="secondary" id="clearBtn">Limpar escrita</button>
+        </div>
+      </div>
+    </section>
+
+    <section class="panel glass">
+      <div class="panel-inner">
+        <div class="section-title">Orações da sessão <span class="count" id="storageInfo">memória local</span></div>
+        <div class="toolbar">
+          <input id="searchInput" type="search" placeholder="Buscar dentro das orações..." />
+          <button class="secondary" id="showAllBtn">Ver todas</button>
+        </div>
+        <div class="list" id="prayerList"></div>
+      </div>
+    </section>
+
+    <footer>
+      Tudo fica salvo apenas neste navegador, neste aparelho. Use Exportar PDF para guardar uma cópia bonita das suas jornadas.
+    </footer>
+  </main>
+
+
+  <section class="modal-backdrop" id="sessionPickerModal" aria-hidden="true">
+    <div class="modal" role="dialog" aria-modal="true" aria-labelledby="sessionPickerTitleModal">
+      <div class="modal-top">
+        <div>
+          <h2 class="modal-title" id="sessionPickerTitleModal">Escolher sessão</h2>
+          <p class="modal-sub">Pesquise por título, objetivo ou status. Toque em uma sessão para selecionar.</p>
+        </div>
+        <button class="close-btn" id="closeSessionPickerBtn" aria-label="Fechar seletor">×</button>
+      </div>
+
+      <div class="session-search-row">
+        <input id="sessionSearchInput" type="search" placeholder="Buscar sessão..." />
+      </div>
+
+      <div class="session-picker-list" id="sessionPickerList"></div>
+
+      <div class="modal-actions">
+        <button class="secondary" id="viewAllSessionsBtn">Ver orações de todas</button>
+        <button id="newSessionFromPickerBtn">Nova sessão</button>
+      </div>
+    </div>
+  </section>
+
+  <section class="modal-backdrop" id="editModal" aria-hidden="true">
+    <div class="modal" role="dialog" aria-modal="true" aria-labelledby="editTitle">
+      <div class="modal-top">
+        <div>
+          <h2 class="modal-title" id="editTitle">Editar oração</h2>
+          <p class="modal-sub" id="editSub">Refine sua oração com calma. A data original continua preservada.</p>
+        </div>
+        <button class="close-btn" id="closeEditBtn" aria-label="Fechar edição">×</button>
+      </div>
+
+      <label for="editText">Campo de edição</label>
+      <textarea id="editText" placeholder="Edite sua oração aqui..."></textarea>
+
+      <div class="modal-actions">
+        <button id="saveEditBtn">Salvar edição</button>
+        <button class="secondary" id="cancelEditBtn">Cancelar</button>
+      </div>
+    </div>
+  </section>
+
+
+  <section class="focus-reader-backdrop" id="focusReaderModal" aria-hidden="true">
+    <div class="focus-reader">
+      <div class="focus-top">
+        <div>
+          <h2 class="focus-title" id="focusReaderTitle">Sessão</h2>
+          <p class="focus-meta" id="focusReaderMeta">—</p>
+        </div>
+        <button class="focus-close" id="closeFocusReaderBtn">×</button>
+      </div>
+
+      <div class="focus-content" id="focusReaderContent"></div>
+    </div>
+  </section>
+
+  <section class="print-area" id="printArea"></section>
+  <div class="toast" id="toast"></div>
+
+  <script>
+    const KEY = "espelhoDeFe_sessoes_v1";
+
+    const sessionTitle = document.getElementById("sessionTitle");
+    const sessionGoal = document.getElementById("sessionGoal");
+    const createSessionBtn = document.getElementById("createSessionBtn");
+    const exportPdfBtn = document.getElementById("exportPdfBtn");
+    const exportBackupBtn = document.getElementById("exportBackupBtn");
+    const exportTxtBtn = document.getElementById("exportTxtBtn");
+    const sessionSelect = document.getElementById("sessionSelect");
+    const openSessionPickerBtn = document.getElementById("openSessionPickerBtn");
+    const sessionPickerTitle = document.getElementById("sessionPickerTitle");
+    const sessionPickerModal = document.getElementById("sessionPickerModal");
+    const closeSessionPickerBtn = document.getElementById("closeSessionPickerBtn");
+    const sessionSearchInput = document.getElementById("sessionSearchInput");
+    const sessionPickerList = document.getElementById("sessionPickerList");
+    const viewAllSessionsBtn = document.getElementById("viewAllSessionsBtn");
+    const newSessionFromPickerBtn = document.getElementById("newSessionFromPickerBtn");
+    const activeSessionLabel = document.getElementById("activeSessionLabel");
+    const currentSessionBox = document.getElementById("currentSessionBox");
+
+    const prayerText = document.getElementById("prayerText");
+    const savePrayerBtn = document.getElementById("savePrayerBtn");
+    const clearBtn = document.getElementById("clearBtn");
+    const searchInput = document.getElementById("searchInput");
+    const showAllBtn = document.getElementById("showAllBtn");
+    const prayerList = document.getElementById("prayerList");
+    const charCount = document.getElementById("charCount");
+    const storageInfo = document.getElementById("storageInfo");
+
+    const sessionTotal = document.getElementById("sessionTotal");
+    const activeTotal = document.getElementById("activeTotal");
+    const doneTotal = document.getElementById("doneTotal");
+    const prayerTotal = document.getElementById("prayerTotal");
+
+    const editModal = document.getElementById("editModal");
+    const editText = document.getElementById("editText");
+    const editSub = document.getElementById("editSub");
+    const saveEditBtn = document.getElementById("saveEditBtn");
+    const cancelEditBtn = document.getElementById("cancelEditBtn");
+    const closeEditBtn = document.getElementById("closeEditBtn");
+
+    const printArea = document.getElementById("printArea");
+    const toast = document.getElementById("toast");
+
+    let data = load();
+    let selectedSessionId = data.selectedSessionId || null;
+    let viewingAll = false;
+    let currentEditPrayerId = null;
+
+    function uid(){
+      return crypto.randomUUID ? crypto.randomUUID() : String(Date.now() + Math.random());
+    }
+
+    function load(){
+      try{
+        const saved = JSON.parse(localStorage.getItem(KEY));
+        if(saved && Array.isArray(saved.sessions)) return saved;
+      }catch(e){}
+      return {sessions:[], selectedSessionId:null};
+    }
+
+    function persist(){
+      data.selectedSessionId = selectedSessionId;
+      localStorage.setItem(KEY, JSON.stringify(data));
+      render();
+    }
+
+    function showToast(message){
+      toast.textContent = message;
+      toast.classList.add("show");
+      setTimeout(() => toast.classList.remove("show"), 2300);
+    }
+
+    function formatDate(iso){
+      const date = new Date(iso);
+      return date.toLocaleString("pt-BR", {
+        weekday:"long",
+        day:"2-digit",
+        month:"2-digit",
+        year:"numeric",
+        hour:"2-digit",
+        minute:"2-digit"
+      });
+    }
+
+    function escapeHTML(value){
+      return String(value || "").replace(/[&<>"']/g, char => ({
+        "&":"&amp;",
+        "<":"&lt;",
+        ">":"&gt;",
+        "\"":"&quot;",
+        "'":"&#039;"
+      }[char]));
+    }
+
+    function getSelectedSession(){
+      return data.sessions.find(s => s.id === selectedSessionId) || null;
+    }
+
+    function createSession(){
+      const title = sessionTitle.value.trim();
+      const goal = sessionGoal.value.trim();
+
+      if(!title){
+        showToast("Dê um título para a sessão.");
+        sessionTitle.focus();
+        return;
+      }
+
+      const session = {
+        id: uid(),
+        title,
+        goal: goal || `Agradeço porque ${title} já se cumpriu.`,
+        status: "active",
+        createdAt: new Date().toISOString(),
+        completedAt: null,
+        prayers: []
+      };
+
+      data.sessions.unshift(session);
+      selectedSessionId = session.id;
+      viewingAll = false;
+      sessionTitle.value = "";
+      sessionGoal.value = "";
+      persist();
+      showToast("Sessão criada. Agora escreve como se já tivesse acontecido.");
+    }
+
+    function savePrayer(){
+      const session = getSelectedSession();
+      if(!session){
+        showToast("Crie ou selecione uma sessão primeiro.");
+        return;
+      }
+      if(session.status === "done"){
+        showToast("Essa sessão já foi conferida. Inicie uma nova jornada.");
+        return;
+      }
+
+      const text = prayerText.value.trim();
+      if(!text){
+        showToast("Escreva sua oração antes de registrar.");
+        prayerText.focus();
+        return;
+      }
+
+      session.prayers.unshift({
+        id: uid(),
+        text,
+        createdAt: new Date().toISOString(),
+        updatedAt: null
+      });
+
+      prayerText.value = "";
+      updateCharCount();
+      persist();
+      showToast("Oração registrada dentro deste propósito.");
+    }
+
+    function completeSession(id){
+      const session = data.sessions.find(s => s.id === id);
+      if(!session) return;
+
+      const ok = confirm(`Marcar "${session.title}" como CONFERIDO no mundo físico?`);
+      if(!ok) return;
+
+      session.status = "done";
+      session.completedAt = new Date().toISOString();
+      persist();
+      showToast("Conferido. Essa sessão agora está marcada como realizada.");
+    }
+
+    function reopenSession(id){
+      const session = data.sessions.find(s => s.id === id);
+      if(!session) return;
+
+      const ok = confirm(`Reabrir a sessão "${session.title}"?`);
+      if(!ok) return;
+
+      session.status = "active";
+      session.completedAt = null;
+      persist();
+      showToast("Sessão reaberta.");
+    }
+
+    function deleteSession(id){
+      const session = data.sessions.find(s => s.id === id);
+      if(!session) return;
+
+      const ok = confirm(`Apagar a sessão "${session.title}" e todas as orações dela?`);
+      if(!ok) return;
+
+      data.sessions = data.sessions.filter(s => s.id !== id);
+      if(selectedSessionId === id) selectedSessionId = data.sessions[0]?.id || null;
+      persist();
+      showToast("Sessão apagada.");
+    }
+
+    function openEditor(prayerId){
+      const found = findPrayer(prayerId);
+      if(!found) return;
+
+      currentEditPrayerId = prayerId;
+      editText.value = found.prayer.text;
+      editSub.textContent = `Sessão: ${found.session.title} • Registrada em ${formatDate(found.prayer.createdAt)}`;
+      editModal.classList.add("open");
+      editModal.setAttribute("aria-hidden","false");
+      document.body.style.overflow = "hidden";
+      setTimeout(() => editText.focus(), 80);
+    }
+
+    function closeEditor(){
+      editModal.classList.remove("open");
+      editModal.setAttribute("aria-hidden","true");
+      document.body.style.overflow = "";
+      currentEditPrayerId = null;
+      editText.value = "";
+    }
+
+    function saveEdit(){
+      const found = findPrayer(currentEditPrayerId);
+      if(!found) return;
+
+      if(found.session.status === "done"){
+        showToast("Sessão conferida não deve ser alterada.");
+        return;
+      }
+
+      const clean = editText.value.trim();
+      if(!clean){
+        showToast("A oração não pode ficar vazia.");
+        return;
+      }
+
+      found.prayer.text = clean;
+      found.prayer.updatedAt = new Date().toISOString();
+      persist();
+      closeEditor();
+      showToast("Oração atualizada.");
+    }
+
+    function deletePrayer(prayerId){
+      const found = findPrayer(prayerId);
+      if(!found) return;
+
+      if(found.session.status === "done"){
+        showToast("Sessão conferida não deve ser alterada.");
+        return;
+      }
+
+      const ok = confirm("Apagar esta oração?");
+      if(!ok) return;
+
+      found.session.prayers = found.session.prayers.filter(p => p.id !== prayerId);
+      persist();
+      showToast("Oração apagada.");
+    }
+
+    function findPrayer(prayerId){
+      for(const session of data.sessions){
+        const prayer = session.prayers.find(p => p.id === prayerId);
+        if(prayer) return {session, prayer};
+      }
+      return null;
+    }
+
+    function safeFileName(name){
+      return String(name || "sessao")
+        .normalize("NFD").replace(/[\u0300-\u036f]/g, "")
+        .replace(/[^a-zA-Z0-9-_ ]/g, "")
+        .trim()
+        .replace(/\s+/g, "-")
+        .toLowerCase() || "sessao";
+    }
+
+    function exportStyledPdf(){
+      const session = getSelectedSession();
+
+      if(!session){
+        showToast("Selecione uma sessão para exportar em PDF.");
+        return;
+      }
+
+      printArea.innerHTML = `
+        <div class="print-cover">
+          <h1>Espelho de Fé</h1>
+          <p>Sessão de propósito: <strong>${escapeHTML(session.title)}</strong></p>
+          <p>${escapeHTML(session.goal)}</p>
+          <p><strong>${session.prayers.length}</strong> oração${session.prayers.length === 1 ? "" : "es"} • Status: <strong>${session.status === "done" ? "Conferido" : "Em fé"}</strong></p>
+          <p>Exportado em ${new Date().toLocaleDateString("pt-BR")}</p>
+        </div>
+
+        <section class="print-session">
+          <h2>${escapeHTML(session.title)}</h2>
+          <p>${escapeHTML(session.goal)}</p>
+          <p><strong>Status:</strong> ${session.status === "done" ? "Conferido no mundo físico" : "Em fé"}<br>
+          <strong>Criada em:</strong> ${formatDate(session.createdAt)}
+          ${session.completedAt ? `<br><strong>Conferida em:</strong> ${formatDate(session.completedAt)}` : ""}</p>
+        </section>
+
+        ${session.prayers.map(p => `
+          <article class="print-prayer ${session.status === "done" ? "done" : ""}">
+            <div class="print-date">${formatDate(p.createdAt)}${p.updatedAt ? " • editada" : ""}</div>
+            <div class="print-text">${escapeHTML(p.text)}</div>
+          </article>
+        `).join("") || `<article class="print-prayer"><div class="print-text">Nenhuma oração registrada nesta sessão.</div></article>`}
+      `;
+
+      document.title = `Espelho de Fé - ${session.title}`;
+      showToast("Na próxima tela, escolha Salvar como PDF.");
+      setTimeout(() => window.print(), 350);
+    }
+
+    function downloadFile(filename, content, type){
+      const blob = new Blob([content], {type});
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement("a");
+      a.href = url;
+      a.download = filename;
+      document.body.appendChild(a);
+      a.click();
+      a.remove();
+      URL.revokeObjectURL(url);
+    }
+
+    function exportBackupJson(){
+      if(!data.sessions.length){
+        showToast("Ainda não há dados para exportar.");
+        return;
+      }
+
+      const content = JSON.stringify(data, null, 2);
+      const date = new Date().toISOString().slice(0,10);
+      downloadFile(`espelho-de-fe-backup-${date}.json`, content, "application/json;charset=utf-8");
+      showToast("Backup JSON exportado.");
+    }
+
+    function exportBackupTxt(){
+      if(!data.sessions.length){
+        showToast("Ainda não há dados para exportar.");
+        return;
+      }
+
+      const content = data.sessions.map(session => {
+        return `SESSÃO: ${session.title}
+OBJETIVO: ${session.goal}
+STATUS: ${session.status === "done" ? "CONFERIDO" : "EM FÉ"}
+CRIADA EM: ${formatDate(session.createdAt)}
+${session.completedAt ? `CONFERIDA EM: ${formatDate(session.completedAt)}\n` : ""}
+ORAÇÕES:
+${session.prayers.map((p, i) => `
+${i + 1}. ${formatDate(p.createdAt)}
+${p.text}
+`).join("\n")}
+----------------------------------------
+`;
+      }).join("\n");
+
+      const date = new Date().toISOString().slice(0,10);
+      downloadFile(`espelho-de-fe-backup-${date}.txt`, content, "text/plain;charset=utf-8");
+      showToast("Backup TXT exportado.");
+    }
+
+    function updateCharCount(){
+      const length = prayerText.value.length;
+      charCount.textContent = `${length} caractere${length === 1 ? "" : "s"}`;
+    }
+
+    function openSessionPicker(){
+      renderSessionPickerList();
+      sessionPickerModal.classList.add("open");
+      sessionPickerModal.setAttribute("aria-hidden","false");
+      document.body.style.overflow = "hidden";
+      setTimeout(() => sessionSearchInput.focus(), 80);
+    }
+
+    function closeSessionPicker(){
+      sessionPickerModal.classList.remove("open");
+      sessionPickerModal.setAttribute("aria-hidden","true");
+      document.body.style.overflow = "";
+      sessionSearchInput.value = "";
+    }
+
+    function selectSession(id){
+      selectedSessionId = id;
+      viewingAll = false;
+      showAllBtn.textContent = "Ver todas";
+      closeSessionPicker();
+      persist();
+      showToast("Sessão selecionada.");
+    }
+
+    function renderSessionPickerList(){
+      const q = sessionSearchInput.value.trim().toLowerCase();
+
+      const rows = data.sessions.filter(s => {
+        const status = s.status === "done" ? "conferido realizado cumprido" : "em fé ativo";
+        return `${s.title} ${s.goal} ${status}`.toLowerCase().includes(q);
+      });
+
+      if(!rows.length){
+        sessionPickerList.innerHTML = `<div class="empty">${data.sessions.length ? "Nenhuma sessão encontrada nessa busca." : "Nenhuma sessão criada ainda."}</div>`;
+        return;
+      }
+
+      sessionPickerList.innerHTML = rows.map(s => `
+        <button class="picker-card ${s.id === selectedSessionId ? "selected" : ""} ${s.status === "done" ? "done" : ""}" onclick="selectSession('${s.id}')">
+          <div class="picker-title-line">
+            <strong>${escapeHTML(s.title)}</strong>
+            <span class="pill ${s.status === "done" ? "done" : ""}">${s.status === "done" ? "✓ Conferido" : "✦ Em fé"}</span>
+          </div>
+          <p class="picker-purpose">${escapeHTML(s.goal)}</p>
+          <div class="picker-meta">
+            <span>${s.prayers.length} oração${s.prayers.length === 1 ? "" : "es"}</span>
+            <span>Criada: ${formatDate(s.createdAt)}</span>
+            ${s.completedAt ? `<span>Conferida: ${formatDate(s.completedAt)}</span>` : ""}
+          </div>
+        </button>
+      `).join("");
+    }
+
+    function renderSessionSelect(){
+      if(!data.sessions.length){
+        sessionSelect.innerHTML = `<option value="">Nenhuma sessão criada</option>`;
+        sessionPickerTitle.textContent = "Nenhuma sessão criada";
+        selectedSessionId = null;
+        return;
+      }
+
+      if(!selectedSessionId || !data.sessions.some(s => s.id === selectedSessionId)){
+        selectedSessionId = data.sessions[0].id;
+      }
+
+      sessionSelect.innerHTML = data.sessions.map(s => `
+        <option value="${s.id}" ${s.id === selectedSessionId ? "selected" : ""}>
+          ${s.status === "done" ? "✓ " : "• "} ${escapeHTML(s.title)}
+        </option>
+      `).join("");
+
+      const selected = getSelectedSession();
+      sessionPickerTitle.textContent = selected ? `${selected.status === "done" ? "✓ " : "✦ "}${selected.title}` : "Nenhuma sessão criada";
+    }
+
+    function renderCurrentSession(){
+      const session = getSelectedSession();
+      activeSessionLabel.textContent = session ? session.title : "nenhuma selecionada";
+
+      if(!session){
+        currentSessionBox.innerHTML = `<div class="empty">Crie uma sessão para começar seu primeiro propósito.</div>`;
+        savePrayerBtn.disabled = true;
+        prayerText.disabled = true;
+        return;
+      }
+
+      savePrayerBtn.disabled = session.status === "done";
+      prayerText.disabled = session.status === "done";
+      prayerText.placeholder = session.status === "done"
+        ? "Esta sessão já foi conferida. Inicie uma nova sessão para outro propósito."
+        : `Escreva agradecendo como se "${session.title}" já tivesse acontecido...`;
+
+      currentSessionBox.innerHTML = `
+        <article class="session-card ${session.status === "done" ? "done" : ""}">
+          <div class="session-top">
+            <div>
+              <h2 class="session-title">${escapeHTML(session.title)}</h2>
+              <p class="session-purpose">${escapeHTML(session.goal)}</p>
+            </div>
+            <span class="pill ${session.status === "done" ? "done" : ""}">
+              ${session.status === "done" ? "✓ Conferido" : "✦ Em fé"}
+            </span>
+          </div>
+          <div class="session-meta">
+            <span>Criada: ${formatDate(session.createdAt)}</span>
+            <span>${session.prayers.length} oração${session.prayers.length === 1 ? "" : "es"}</span>
+            ${session.completedAt ? `<span>Conferida: ${formatDate(session.completedAt)}</span>` : ""}
+          </div>
+          <div class="session-actions">
+            ${session.status === "done"
+              ? `<button class="mini secondary" onclick="reopenSession('${session.id}')">Reabrir</button>`
+              : `<button class="mini success" onclick="completeSession('${session.id}')">Confere</button>`
+            }
+            <button class="mini danger" onclick="deleteSession('${session.id}')">Apagar sessão</button>
+          </div>
+        </article>
+      `;
+    }
+
+
+
+    function shouldCollapse(text){
+      return String(text || "").length > 320;
+    }
+
+    function openFocusReader(prayerId){
+      const found = findPrayer(prayerId);
+      if(!found) return;
+
+      document.getElementById("focusReaderTitle").textContent = found.session.title;
+      document.getElementById("focusReaderMeta").textContent =
+        `${formatDate(found.prayer.createdAt)}${found.prayer.updatedAt ? " • editada posteriormente" : ""}`;
+
+      document.getElementById("focusReaderContent").textContent = found.prayer.text;
+
+      const modal = document.getElementById("focusReaderModal");
+      modal.classList.add("open");
+      modal.setAttribute("aria-hidden","false");
+      document.body.style.overflow = "hidden";
+    }
+
+    function closeFocusReader(){
+      const modal = document.getElementById("focusReaderModal");
+      modal.classList.remove("open");
+      modal.setAttribute("aria-hidden","true");
+      document.body.style.overflow = "";
+    }
+
+    function renderPrayers(){
+      const query = searchInput.value.trim().toLowerCase();
+      let rows = [];
+
+      if(viewingAll){
+        data.sessions.forEach(session => {
+          session.prayers.forEach(prayer => rows.push({session, prayer}));
+        });
+      }else{
+        const session = getSelectedSession();
+        if(session) rows = session.prayers.map(prayer => ({session, prayer}));
+      }
+
+      rows = rows.filter(({session, prayer}) => {
+        const haystack = `${session.title} ${session.goal} ${prayer.text}`.toLowerCase();
+        return haystack.includes(query);
+      });
+
+      if(!rows.length){
+        prayerList.innerHTML = `<div class="empty">${viewingAll ? "Nenhuma oração encontrada." : "Essa sessão ainda não tem orações registradas."}</div>`;
+        return;
+      }
+
+      prayerList.innerHTML = rows.map(({session, prayer}) => `
+        <article class="prayer ${session.status === "done" ? "done" : ""}">
+          <div class="date">
+            ${session.status === "done" ? "✓" : "✦"} ${formatDate(prayer.createdAt)}
+            ${viewingAll ? `<br><span class="edited">Sessão: ${escapeHTML(session.title)}</span>` : ""}
+            ${prayer.updatedAt ? `<br><span class="edited">editada em ${formatDate(prayer.updatedAt)}</span>` : ""}
+          </div>
+          <p id="prayer-text-${prayer.id}" class="prayer-text ${shouldCollapse(prayer.text) ? "collapsed" : "expanded"}">${escapeHTML(prayer.text)}</p>
+
+          ${shouldCollapse(prayer.text)
+            ? `<button class="read-more-btn" onclick="openFocusReader('${prayer.id}')">Ler mais</button>`
+            : ""
+          }
+
+          <div class="prayer-actions">
+            ${session.status === "done"
+              ? `<span class="pill done">realizada no mundo físico</span>`
+              : `<button class="mini secondary" onclick="openEditor('${prayer.id}')">Editar</button>
+                 <button class="mini danger" onclick="deletePrayer('${prayer.id}')">Apagar</button>`
+            }
+          </div>
+        </article>
+      `).join("");
+    }
+
+    function renderStats(){
+      const sessions = data.sessions;
+      const totalPrayers = sessions.reduce((sum, s) => sum + s.prayers.length, 0);
+
+      sessionTotal.textContent = sessions.length;
+      activeTotal.textContent = sessions.filter(s => s.status === "active").length;
+      doneTotal.textContent = sessions.filter(s => s.status === "done").length;
+      prayerTotal.textContent = totalPrayers;
+
+      try{
+        const sizeKB = Math.round((localStorage.getItem(KEY) || "").length / 1024);
+        storageInfo.textContent = `${sizeKB} KB salvos`;
+      }catch(e){
+        storageInfo.textContent = "memória local";
+      }
+    }
+
+    function render(){
+      renderSessionSelect();
+      renderCurrentSession();
+      renderPrayers();
+      renderStats();
+    }
+
+    createSessionBtn.addEventListener("click", createSession);
+    openSessionPickerBtn.addEventListener("click", openSessionPicker);
+    closeSessionPickerBtn.addEventListener("click", closeSessionPicker);
+    sessionSearchInput.addEventListener("input", renderSessionPickerList);
+    sessionPickerModal.addEventListener("click", e => {
+      if(e.target === sessionPickerModal) closeSessionPicker();
+    });
+    viewAllSessionsBtn.addEventListener("click", () => {
+      viewingAll = true;
+      showAllBtn.textContent = "Ver sessão";
+      closeSessionPicker();
+      renderPrayers();
+      showToast("Mostrando orações de todas as sessões.");
+    });
+    newSessionFromPickerBtn.addEventListener("click", () => {
+      closeSessionPicker();
+      sessionTitle.focus();
+    });
+    savePrayerBtn.addEventListener("click", savePrayer);
+    clearBtn.addEventListener("click", () => {
+      prayerText.value = "";
+      updateCharCount();
+      prayerText.focus();
+    });
+    exportPdfBtn.addEventListener("click", exportStyledPdf);
+    exportBackupBtn.addEventListener("click", exportBackupJson);
+    exportTxtBtn.addEventListener("click", exportBackupTxt);
+    searchInput.addEventListener("input", renderPrayers);
+    prayerText.addEventListener("input", updateCharCount);
+
+    showAllBtn.addEventListener("click", () => {
+      viewingAll = !viewingAll;
+      showAllBtn.textContent = viewingAll ? "Ver sessão" : "Ver todas";
+      renderPrayers();
+    });
+
+    sessionSelect.addEventListener("change", () => {
+      selectedSessionId = sessionSelect.value || null;
+      viewingAll = false;
+      showAllBtn.textContent = "Ver todas";
+      persist();
+    });
+
+    saveEditBtn.addEventListener("click", saveEdit);
+    cancelEditBtn.addEventListener("click", closeEditor);
+    closeEditBtn.addEventListener("click", closeEditor);
+    editModal.addEventListener("click", e => {
+      if(e.target === editModal) closeEditor();
+    });
+
+    const focusReaderModal = document.getElementById("focusReaderModal");
+    const closeFocusReaderBtn = document.getElementById("closeFocusReaderBtn");
+
+    closeFocusReaderBtn.addEventListener("click", closeFocusReader);
+
+    focusReaderModal.addEventListener("click", e => {
+      if(e.target === focusReaderModal) closeFocusReader();
+    });
+
+    document.addEventListener("keydown", e => {
+      if(e.key === "Escape" && editModal.classList.contains("open")) closeEditor();
+      if(e.key === "Escape" && sessionPickerModal.classList.contains("open")) closeSessionPicker();
+      if(e.key === "Escape" && document.getElementById("focusReaderModal").classList.contains("open")) closeFocusReader();
+
+      if((e.ctrlKey || e.metaKey) && e.key === "Enter"){
+        if(editModal.classList.contains("open")) saveEdit();
+        else savePrayer();
+      }
+    });
+
+    updateCharCount();
+    render();
+  </script>
+</body>
+</html>
